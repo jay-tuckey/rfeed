@@ -1,6 +1,6 @@
 ## Overview
 
-**rfeed** is a library to generate RSS 2.0 feeds in Python. It's based on the work from Andrew Dalke in the 
+**rfeed** is a library to generate RSS 2.0 feeds in Python. It's forked from [rfeed](https://github.com/svpino/rfeed) by Santiago L. Valdarrama, which was based on the work of Andrew Dalke in the 
 [PyRSS2Gen](http://www.dalkescientific.com/Python/PyRSS2Gen.html) library (see the [Inspiration](https://github.com/svpino/rfeed/blob/master/README.md#inspiration) 
 section below for more information.)
 
@@ -72,7 +72,7 @@ description of each one of them:
 * `Guid`: Represents a string that uniquely identifies the item.
 * `Source`: Represents the RSS channel that the item came from.
 
-(For more information about each one of these classes, you can check the official [RSS 2.0 specification](http://cyber.law.harvard.edu/rss/rss.html), and check 
+(For more information about each one of these classes, you can check the official [RSS 2.0 specification](https://www.rssboard.org/rss-specification), and check 
 out the `rfeed.py` source file.)
 
 ## Extending the library
@@ -214,6 +214,6 @@ I really appreciate anything you can contribute to the library.
 
 ## License
 
-[MIT Licence](https://github.com/svpino/rfeed/blob/master/LICENSE)
+[MIT Licence](https://github.com/jay-tuckey/rfeed/blob/master/LICENSE)
 
 Copyright (c) 2014 Santiago Valdarrama

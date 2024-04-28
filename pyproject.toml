@@ -1,24 +1,24 @@
 [project]
 name = "rfeed"
-version = "1.0.0"
+version = "1.1.0"
 license = { text = "MIT" }
 authors = [
   { name = "Santiago L. Valdarrama", email = "svpino@gmail.com" },
+  { name = "Jay Tuckey", email = "jay@tuckey.email" },
 ]
 description = "Python RSS 2.0 Generator"
 readme = "README.md"
-requires-python = ">=2.7"
+requires-python = ">=3.6"
 classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 2",
   "Programming Language :: Python :: 3",
   "Topic :: Internet :: WWW/HTTP",
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/svpino/rfeed"
-"Bug Tracker" = "https://github.com/svpino/rfeed/issues"
+"Homepage" = "https://github.com/jay-tuckey/rfeed"
+"Bug Tracker" = "https://github.com/jay-tuckey/rfeed/issues"
 
 [build-system]
 requires = ["setuptools"]

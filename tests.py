@@ -19,9 +19,9 @@ class HostTestCase(BaseTestCase):
 
 	def test_add_extension(self):
 		host = Host()
-		self.assertEquals(0, len(host.extensions))
+		self.assertEqual(0, len(host.extensions))
 		host.add_extension(MockExtension1())
-		self.assertEquals(1, len(host.extensions))
+		self.assertEqual(1, len(host.extensions))
 
 	def test_add_extension_raises_error_if_extension_is_not_serializable(self):
 		host = Host()
@@ -75,7 +75,7 @@ class FeedTestCase(BaseTestCase):
 		# I'm partially checking for the element because the value includes the version number and
 		# changing it will break the test. By just doing a partial match, I make sure the test keeps
 		# working in future versions as well.
-		self.assertTrue(self._element('docs', 'https://github.com/svpino/rfeed/blob/master/README.md') in Feed('', '', '').rss())
+		self.assertTrue(self._element('docs', 'https://github.com/jay-tuckey/rfeed/blob/master/README.md') in Feed('', '', '').rss())
 
 	def test_if_docs_not_specified_use_default_value(self):
 		self.assertTrue('<generator>rfeed v' in Feed('', '', '').rss())

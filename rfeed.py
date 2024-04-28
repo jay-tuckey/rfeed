@@ -1,21 +1,14 @@
 __name__ = "rfeed"
-__version__ = (1, 0, 0)
-__author__ = "Santiago L. Valdarrama - https://blog.svpino.com"
+__version__ = (1, 1, 0)
+__author__ = "Jay Tuckey and Santiago L. Valdarrama"
 _generator = __name__ + " v" + ".".join(map(str, __version__))
-_docs = "https://github.com/svpino/rfeed/blob/master/README.md"
+_docs = "https://github.com/jay-tuckey/rfeed/blob/master/README.md"
 
 import itertools
 import sys
 from xml.sax import saxutils
+from io import StringIO
 
-if sys.version_info[0] == 3:
-	basestring = str
-	from io import StringIO
-else:
-	try:
-		from cStringIO import StringIO
-	except ImportError:
-		from StringIO import StringIO
 
 class Serializable:
 	""" Represents an object that can be serialized as part of the feed.
@@ -72,7 +65,7 @@ class Serializable:
 			self.handler.startElement(name, attributes)
 
 			if value is not None:
-				str_value = value if isinstance(value, basestring) else str(value)
+				str_value = value if isinstance(value, str) else str(value)
 				while len(str_value):
 					cdata_section = parse_cdata(str_value)
 					if cdata_section is not None:
@@ -433,10 +426,10 @@ class iTunes(Extension):
 		Extension.__init__(self)
 
 		self.author = author
-		self.block = True if (isinstance(block, basestring) and block.lower() == 'yes') else block
+		self.block = True if (isinstance(block, str) and block.lower() == 'yes') else block
 		self.image = image
-		self.explicit = True if (isinstance(explicit, basestring) and explicit.lower() == 'yes') else explicit
-		self.complete = True if (isinstance(complete, basestring) and complete.lower() == 'yes') else complete
+		self.explicit = True if (isinstance(explicit, str) and explicit.lower() == 'yes') else explicit
+		self.complete = True if (isinstance(complete, str) and complete.lower() == 'yes') else complete
 		self.owner = owner
 		self.subtitle = subtitle
 		self.summary = summary
@@ -447,7 +440,7 @@ class iTunes(Extension):
 
 		if isinstance(self.categories, iTunesCategory):
 			self.categories = [self.categories]
-		elif isinstance(self.categories, basestring):
+		elif isinstance(self.categories, str):
 			self.categories = [iTunesCategory(self.categories)]
 
 	def get_namespace(self):
@@ -480,7 +473,7 @@ class iTunes(Extension):
 		self._write_element("itunes:type", self.type)
 
 		for category in self.categories:
-			if isinstance(category, basestring):
+			if isinstance(category, str):
 				category = iTunesCategory(category)
 			category.publish(self.handler)
 
@@ -508,11 +501,11 @@ class iTunesItem(Serializable):
 		Serializable.__init__(self)
 
 		self.author = author
-		self.block = True if (isinstance(block, basestring) and block.lower() == 'yes') else block
+		self.block = True if (isinstance(block, str) and block.lower() == 'yes') else block
 		self.image = image
 		self.duration = duration
-		self.explicit = True if (isinstance(explicit, basestring) and explicit.lower() == 'yes') else explicit
-		self.is_closed_captioned = True if (isinstance(is_closed_captioned, basestring) and is_closed_captioned.lower() == 'yes') else is_closed_captioned
+		self.explicit = True if (isinstance(explicit, str) and explicit.lower() == 'yes') else explicit
+		self.is_closed_captioned = True if (isinstance(is_closed_captioned, str) and is_closed_captioned.lower() == 'yes') else is_closed_captioned
 		self.order = order
 		self.subtitle = subtitle
 		self.summary = summary
@@ -596,7 +589,7 @@ class Item(Host):
 
 		if isinstance(self.categories, Category):
 			self.categories = [self.categories]
-		elif isinstance(self.categories, basestring):
+		elif isinstance(self.categories, str):
 			self.categories = [Category(self.categories)]
 
 	def publish(self, handler):
@@ -613,7 +606,7 @@ class Item(Host):
 		self._write_element("pubDate", self._date(self.pubDate))
 
 		for category in self.categories:
-			if isinstance(category, basestring):
+			if isinstance(category, str):
 				category = Category(category)
 			category.publish(self.handler)
 
@@ -688,14 +681,14 @@ class Feed(Host):
 
 		if isinstance(self.categories, Category):
 			self.categories = [self.categories]
-		elif isinstance(self.categories, basestring):
+		elif isinstance(self.categories, str):
 			self.categories = [Category(self.categories)]
 
 		self.items = [] if items is None else items
 
 	def rss(self):
 		output = StringIO()
-		handler = saxutils.XMLGenerator(output, 'UTF-8')
+		handler = saxutils.XMLGenerator(output, encoding='UTF-8')
 		handler.startDocument()
 
 		handler.startElement("rss", self._get_attributes())
@@ -725,7 +718,7 @@ class Feed(Host):
 		self._write_element("rating", self.rating)
 
 		for category in self.categories:
-			if isinstance(category, basestring):
+			if isinstance(category, str):
 				category = Category(category)
 			category.publish(self.handler)
 
