@@ -4,7 +4,6 @@ __author__ = "Jay Tuckey and Santiago L. Valdarrama"
 _generator = __name__ + " v" + ".".join(map(str, __version__))
 _docs = "https://github.com/jay-tuckey/rfeed/blob/master/README.md"
 
-import itertools
 import sys
 from xml.sax import saxutils
 from io import StringIO
@@ -752,7 +751,7 @@ class Feed(Host):
             if isinstance(extension, Extension):
                 namespace = extension.get_namespace()
                 if namespace is not None:
-                    attributes = dict(itertools.chain(attributes.items(), namespace.items()))
+                    attributes.update(namespace.items())
 
         return attributes
 
