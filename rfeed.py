@@ -551,6 +551,18 @@ class iTunesItem(Serializable):
         self._write_element("itunes:episodeType", self.episodeType)
         self._write_element("itunes:season", self.season)
 
+class Content(Extension):
+    def get_namespace(self):
+        return {"xmlns:content": "http://purl.org/rss/1.0/modules/content/"}
+
+class ContentItem(Serializable):
+    def __init__(self, content):
+        Serializable.__init__(self)
+        self.content = content
+
+    def publish(self, handler):
+        Serializable.publish(self, handler)
+        self._write_element("content:encoded", self.content)
 
 class Item(Host):
     """ An Item object may represent a "story" - much like a story in a newspaper or magazine; if so its description is a synopsis of the story, and the link points to the full story.
