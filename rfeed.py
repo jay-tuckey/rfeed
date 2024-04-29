@@ -9,6 +9,22 @@ from xml.sax import saxutils
 from io import StringIO
 
 
+def parse_cdata(string):
+    """ Utility function to find CDATA sections in a string value provided for an XML element.
+    These strings will then be printed out un-escaped
+    """
+    if (
+            # There is a CDATA start marker in the string
+            (cdata_begin := string.find("<![CDATA[")) != -1 and
+            # AND there is a CDATA end marker after the start marker
+            (cdata_end := string[cdata_begin:].find("]]>")) != 1
+        ):
+        return {"begin": cdata_begin,
+                    "end": cdata_begin + cdata_end + 3}
+    else:
+        return None
+
+
 class Serializable:
     """ Represents an object that can be serialized as part of the feed.
     """
@@ -48,27 +64,19 @@ class Serializable:
             ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][date.month-1], date.year, date.hour, date.minute, date.second)
 
     def _write_element(self, name, value, attributes = {}):
-        def parse_cdata(string):
-            cdata_begin = string.find("<![CDATA[")
-            if cdata_begin != -1:
-                cdata_end = string[cdata_begin:].find("]]>")
-                if cdata_end != -1:
-                    return {"begin": cdata_begin,
-                            "end": cdata_begin + cdata_end + 3}
-                else:
-                    return None
-            else:
-                return None
-
         if value is not None or attributes != {}:
             self.handler.startElement(name, attributes)
 
             if value is not None:
                 str_value = value if isinstance(value, str) else str(value)
-                while len(str_value):
-                    cdata_section = parse_cdata(str_value)
-                    if cdata_section is not None:
+                while str_value:
+                    if (cdata_section := parse_cdata(str_value)) is not None:
+                        # output all the characters before the start of the CDATA block
                         self.handler.characters(str_value[:cdata_section["begin"]])
+                        # output the CDATA block as "ignorable whitespace"
+                        # Why? Because this means the python sax module won't
+                        # try to escape the characters inside it. This is really a
+                        # hack but it works.
                         self.handler.ignorableWhitespace(
                                 str_value[cdata_section["begin"]:cdata_section["end"]])
                         str_value = str_value[cdata_section["end"]:]
